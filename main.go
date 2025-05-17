@@ -19,19 +19,19 @@ import (
 
 var (
 	configFile = flag.String("config-file", "config.json", "path to custom configuration file")
-	mazeFile 	 = flag.String("maze-file", "maze.txt", "path to a custom maze file")
+	mazeFile   = flag.String("maze-file", "maze.txt", "path to a custom maze file")
 )
 
-type sprite sruct {
-	row 				int
-	column 			int
-	startRow 		int
+type sprite struct {
+	row         int
+	column      int
+	startRow    int
 	startColumn int
 }
 
 type ghost struct {
 	position sprite
-	status GhostStatus
+	status   GhostStatus
 }
 
 type GhostStatus string
@@ -41,8 +41,10 @@ const (
 	GhostStatusBlue   GhostStatus = "Blue"
 )
 
-var ghostsStatusMx sync.RWMutex
-var pillMx sync.Mutex
+var (
+	ghostsStatusMx sync.RWMutex
+	pillMx         sync.Mutex
+)
 
 type config struct {
 	Player           string        `json:"player"`
@@ -57,13 +59,15 @@ type config struct {
 	PillDurationSecs time.Duration `json:"pill_duration_secs"`
 }
 
-var cfg config
-var player sprite
-var ghosts []*ghost
-var maze []string
-var score int
-var numDots int
-var lives = 3
+var (
+	cfg     config
+	player  sprite
+	ghosts  []*ghost
+	maze    []string
+	score   int
+	numDots int
+	lives   = 3
+)
 
 var maze []string
 
@@ -239,7 +243,7 @@ func printOnScreen() {
 
 	moveCursor(len(maze)+1, 0)
 
-	livesRemaining := strconv.Itoa(lives) //converts lives int to a string
+	livesRemaining := strconv.Itoa(lives) // converts lives int to a string
 	if cfg.UseEmoji {
 		livesRemaining = getLivesAsEmoji()
 	}
@@ -394,7 +398,6 @@ func init() {
 	cbTerm.Stdin = os.Stdin
 
 	err := cbTerm.Run()
-
 	if err != nil {
 		log.Fatalln("Could not activate cbreak mode: ", err)
 	}
